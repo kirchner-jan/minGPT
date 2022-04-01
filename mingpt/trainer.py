@@ -5,6 +5,7 @@ so nothing in this file really has anything to do with GPT specifically.
 
 import math
 import logging
+import wandb
 
 from tqdm import tqdm
 import numpy as np
@@ -15,6 +16,7 @@ from torch.optim.lr_scheduler import LambdaLR
 from torch.utils.data.dataloader import DataLoader
 
 logger = logging.getLogger(__name__)
+wandb.init(project="gpt-wiki")
 
 class TrainerConfig:
     # optimization parameters
@@ -104,6 +106,7 @@ class Trainer:
 
                     # report progress
                     pbar.set_description(f"epoch {epoch+1} iter {it}: train loss {loss.item():.5f}. lr {lr:e}")
+                    wandb.log({'loss': loss.item()})
 
             if not is_train:
                 test_loss = float(np.mean(losses))
