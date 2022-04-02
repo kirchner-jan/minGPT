@@ -71,8 +71,8 @@ class Trainer:
             for it, (x, y) in pbar:
 
                 # place data on the correct device
-                x = x.to(self.device)
-                y = y.to(self.device)
+                x = [xi.to(self.device) for xi in x]
+                y = [yi.to(self.device) for yi in y]
 
                 # forward the model
                 with torch.set_grad_enabled(is_train):
@@ -90,7 +90,7 @@ class Trainer:
 
                     # decay the learning rate based on our progress
                     if config.lr_decay:
-                        self.tokens += (y >= 0).sum() # number of tokens processed this step (i.e. label is not -100)
+                        self.tokens += (y[0] >= 0).sum() # number of tokens processed this step (i.e. label is not -100)
                         if self.tokens < config.warmup_tokens:
                             # linear warmup
                             lr_mult = float(self.tokens) / float(max(1, config.warmup_tokens))
