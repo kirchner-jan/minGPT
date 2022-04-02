@@ -31,7 +31,8 @@ class GPTG(nn.Module):
         self.ln = nn.LayerNorm(config.n_components)
         self.drop = nn.Dropout(config.embd_pdrop)
         # transformer
-        self.blocks = nn.Sequential(*[Block(config) for _ in range(config.n_layer)])
+        self.blocks1 = nn.Sequential(*[Block(config) for _ in range(config.n_layer/2)])
+        self.blocks2 = nn.Sequential(*[Block(config) for _ in range(config.n_layer/2)])
         # decoder head
         self.ln_f = nn.LayerNorm(config.n_embd)
         self.head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
@@ -113,8 +114,9 @@ class GPTG(nn.Module):
         # add graph embedding to the token embeddings
         graph_embeddings = self.graph_emb(self.ln(node_embed))
         x = self.drop(token_embeddings + position_embeddings)
-        x = self.blocks(x)
+        x = self.blocks1(x)
         x = x + graph_embeddings
+        x = self.blocks2(x)
         x = self.ln_f(x)
         logits = self.head(x)
 
