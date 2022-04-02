@@ -31,8 +31,8 @@ class GPTG(nn.Module):
         self.ln = nn.LayerNorm(config.n_components)
         self.drop = nn.Dropout(config.embd_pdrop)
         # transformer
-        self.blocks1 = nn.Sequential(*[Block(config) for _ in range(config.n_layer/2)])
-        self.blocks2 = nn.Sequential(*[Block(config) for _ in range(config.n_layer/2)])
+        self.blocks1 = nn.Sequential(*[Block(config) for _ in range(int(config.n_layer/2))])
+        self.blocks2 = nn.Sequential(*[Block(config) for _ in range(int(config.n_layer/2))])
         # decoder head
         self.ln_f = nn.LayerNorm(config.n_embd)
         self.head = nn.Linear(config.n_embd, config.vocab_size, bias=False)
