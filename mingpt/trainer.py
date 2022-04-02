@@ -134,6 +134,7 @@ class Trainer:
 
         for epoch in range(config.max_epochs):
             run_epoch(train_loader, is_train=True)
+            test_loss = float('inf')
             if self.test_dataset is not None:
                 test_loss = run_epoch(test_loader, is_train=False)
 
