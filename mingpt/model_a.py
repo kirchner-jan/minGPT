@@ -113,8 +113,8 @@ class GPTG(nn.Module):
         # add graph embedding to the token embeddings
         graph_embeddings = self.graph_emb(self.ln(node_embed))
         x = self.drop(token_embeddings + position_embeddings)
-        x = x + graph_embeddings
         x = self.blocks(x)
+        x = x + graph_embeddings
         x = self.ln_f(x)
         logits = self.head(x)
 
